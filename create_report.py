@@ -5,8 +5,13 @@ import sqlite3
 import datetime
 import openpyxl
 
+if os.path.exists(os.path.join(os.path.dirname(__file__),'private')):
+	data_dir = 'private'
+else:
+	data_dir = 'sample'
+
 config = configparser.ConfigParser()
-config.read(os.path.join(os.path.dirname(__file__),'private', 'configuration.ini'))
+config.read(os.path.join(os.path.dirname(__file__), data_dir, 'configuration.ini'))
 
 header_mapping = {
 	"site": "B3",
@@ -49,7 +54,7 @@ def cli(idnumber, type, date, mod):
 		else:
 			return
 	else:
-		connection = connect_to_db(os.path.join(os.path.dirname(__file__), 'private', 'db', 'equipment.db'))
+		connection = connect_to_db(os.path.join(os.path.dirname(__file__), data_dir, 'db', 'equipment.db'))
 		if connection is not None:
 			results = select_equipment_by_id(connection, idnumber)
 			results_length = len(results)
@@ -153,7 +158,7 @@ class ReportGenerator:
 			if template_type is None:
 				template_filename_list.append(None)
 			else:
-				template_filename_list.append(os.path.join(os.path.dirname(__file__), "private", "templates", template_type + ".xlsx"))
+				template_filename_list.append(os.path.join(os.path.dirname(__file__), data_dir, "templates", template_type + ".xlsx"))
 		
 		return template_filename_list
 
